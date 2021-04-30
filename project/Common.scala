@@ -12,7 +12,7 @@ object Common {
 
       scalaVersion := "3.0.0-RC3",
       // Uncomment when scalafmt for scala 3 released: https://github.com/scalameta/scalafmt/issues/2216
-      scalafmtOnCompile := true,
+      // scalafmtOnCompile := true,
 
       commonSmlBuildSettings,
       testFrameworks += new TestFramework("munit.Framework")
