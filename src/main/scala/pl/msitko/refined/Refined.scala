@@ -18,9 +18,11 @@ object auto:
       then Refined.unsafeApply(v)
       else error("Validation failed")
 
-opaque type Refined[+Underlying, ValidateExpr] = Underlying
+//opaque type Refined[+Underlying, ValidateExpr] = Underlying
+trait Refined[+Underlying, ValidateExpr]
+
 object Refined:
   // We cannot simply `implicit inline def mk...(): Refined` because inline and opaque types do not compose
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
-  private [refined] def unsafeApply[V <: Int with Singleton, E <: ValidateExpr](i: V): V Refined E = i
-  private [refined] def unsafeApply[V <: String with Singleton, E <: ValidateExpr](i: V): V Refined E = i
+  private [refined] def unsafeApply[V <: Int with Singleton, E <: ValidateExpr](i: V): V Refined E = new Refined[V, E] {}
+  private [refined] def unsafeApply[V <: String with Singleton, E <: ValidateExpr](i: V): V Refined E = new Refined[V, E] {}
