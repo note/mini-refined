@@ -18,16 +18,20 @@ object auto:
       then Refined.unsafeApply(v)
       else error("Validation failed")
 
-//opaque type Refined[+Underlying, ValidateExpr] = Underlying
+//opaque type Refined[Underlying, ValidateExpr] = Underlying
 // I couldn't make the following work with opaque type:
 // val a: Refined[Int, GreaterThan[10]] = 186
 // That worked well with opaque type:
 // val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
 
-trait Refined[+Underlying, ValidateExpr]
+// T is covariant so `val a: Refined[Int, GreaterThan[10]] = 186` works as well as `val a: Refined[186, GreaterThan[10]] = 186`
+// but not sure how important it's that the latter works
+final class Refined[+T, P] private (val value: T) extends AnyVal
+//trait Refined[+Underlying, ValidateExpr]
 
 object Refined:
   // We cannot simply `implicit inline def mk...(): Refined` because inline and opaque types do not compose
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
-  private [refined] def unsafeApply[V <: Int with Singleton, E <: ValidateExpr](i: V): V Refined E = new Refined[V, E] {}
-  private [refined] def unsafeApply[V <: String with Singleton, E <: ValidateExpr](i: V): V Refined E = new Refined[V, E] {}
+  private [refined] def unsafeApply[T <: Int with Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
+  private [refined] def unsafeApply[T <: String with Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
+  implicit def unwrap[T, P](in: Refined[T, P]): T = in.value

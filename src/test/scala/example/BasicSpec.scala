@@ -1,6 +1,7 @@
 package example
 
 import pl.msitko.refined.{Refined}
+import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.ValidateExpr._
 import munit.Assertions.assert
@@ -22,11 +23,13 @@ class BasicSpec extends CompileTimeSuite {
   }
   test("GreaterThan[10] should pass for greater than 10") {
     val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
-//    assertEquals[Any, Any](a, 16)
+    val xy: Int = 45
+    val xyz = xy + 32
+    assertEquals(a + 0, 16)
   }
   test("GreaterThan[10] should pass for greater than 10 (implicitly)") {
-    val a: Refined[Int, GreaterThan[10]] = 186
-//    assertEquals[Any, Any](a, 186)
+    val a: Refined[Int, GreaterThan[10]] = 16
+    assertEquals(a + 0, 16)
   }
   test("""StartsWith["abc] should fail for incorrect input""") {
     failCompilationWith(errors("""mkValidatedString["abd", StartsWith["abc"]]("abd")"""),
@@ -34,9 +37,9 @@ class BasicSpec extends CompileTimeSuite {
   }
   test("""StartsWith["abc] should pass""") {
     val a: String Refined StartsWith["abc"] = mkValidatedString["abcd", StartsWith["abc"]]("abcd")
-//    assertEquals[Any, Any](a, "abcd")
+    assertEquals(a + "", "abcd")
     val a2: String Refined StartsWith["abc"] = mkValidatedString["abc", StartsWith["abc"]]("abc")
-//    assertEquals[Any, Any](a2, "abc")
+    assertEquals(a2 + "", "abc")
   }
   test("Refined.unsafeApply should not compile outside of pl.msitko.refined package") {
     val es = errors("Refined.unsafeApply[34, GreaterThan[10]](34)")
