@@ -19,6 +19,11 @@ object auto:
       else error("Validation failed")
 
 //opaque type Refined[+Underlying, ValidateExpr] = Underlying
+// I couldn't make the following work with opaque type:
+// val a: Refined[Int, GreaterThan[10]] = 186
+// That worked well with opaque type:
+// val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
+
 trait Refined[+Underlying, ValidateExpr]
 
 object Refined:

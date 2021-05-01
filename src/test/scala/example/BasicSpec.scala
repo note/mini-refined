@@ -5,6 +5,7 @@ import pl.msitko.refined.auto._
 import pl.msitko.refined.ValidateExpr._
 import munit.Assertions.assert
 import pl.msitko.refined.testUtils.CompileTimeSuite
+import scala.language.implicitConversions
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
@@ -24,7 +25,7 @@ class BasicSpec extends CompileTimeSuite {
 //    assertEquals[Any, Any](a, 16)
   }
   test("GreaterThan[10] should pass for greater than 10 (implicitly)") {
-    val a: Refined[186, GreaterThan[10]] = 186
+    val a: Refined[Int, GreaterThan[10]] = 186
 //    assertEquals[Any, Any](a, 186)
   }
   test("""StartsWith["abc] should fail for incorrect input""") {
