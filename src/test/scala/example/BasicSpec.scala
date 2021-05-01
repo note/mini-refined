@@ -18,8 +18,18 @@ class BasicSpec extends CompileTimeSuite {
     val a: Int Refined GreaterThan[10] = RefinedLift.mkValidatedInt[16, GreaterThan[10]](16)
     assertEquals[Any, Any](a, 16)
   }
+  test("""StartsWith["abc] should fail for incorrect input""") {
+    failCompilationWith(errors("""RefinedLift.mkValidatedString["abd", StartsWith["abc"]]("abd")"""),
+                  "Validation failed: abd.startsWith(abc)")
+  }
+  test("""StartsWith["abc] should pass""") {
+    val a: String Refined StartsWith["abc"] = RefinedLift.mkValidatedString["abcd", StartsWith["abc"]]("abcd")
+    assertEquals[Any, Any](a, "abcd")
+    val a2: String Refined StartsWith["abc"] = RefinedLift.mkValidatedString["abc", StartsWith["abc"]]("abc")
+    assertEquals[Any, Any](a2, "abc")
+  }
   test("Refined.unsafeApply should not compile outside of pl.msitko.refined package") {
     val es = errors("Refined.unsafeApply[34, GreaterThan[10]](34)")
-    assert(clue(es.head.message).contains("method unsafeApply cannot be accessed as a member"))
+    assert(clue(es.head.message).contains("none of the overloaded alternatives named unsafeApply can be accessed as a member"))
   }
 }
