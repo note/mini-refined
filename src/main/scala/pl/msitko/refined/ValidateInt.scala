@@ -18,7 +18,7 @@ object ValidateInt:
       case _: GreaterThan[t] =>
         inline erasedValue[V] > erasedValue[t] match
           case _: true  => true
-          case _: false => error("Validation failed: " + constValue[ToString[V]] + " < " + constValue[ToString[t]])
+          case _: false => error("Validation failed: " + constValue[ToString[V]] + " > " + constValue[ToString[t]])
       case _: And[a, b] =>
         inline validate[V, a] match
           case true =>

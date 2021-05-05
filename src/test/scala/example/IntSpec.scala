@@ -1,6 +1,6 @@
 package example
 
-import pl.msitko.refined.{Refined}
+import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.ValidateExpr._
@@ -10,16 +10,16 @@ import scala.language.implicitConversions
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
-class BasicSpec extends CompileTimeSuite {
+class IntSpec extends CompileTimeSuite {
   test("GreaterThan[10] should fail for lower or equal to to") {
     failCompilationWith(errors("mkValidatedInt[7, GreaterThan[10]](7)"),
-                  "Validation failed: 7 < 10")
+                  "Validation failed: 7 > 10")
     failCompilationWith(errors("mkValidatedInt[10, GreaterThan[10]](10)"),
-                  "Validation failed: 10 < 10")
+                  "Validation failed: 10 > 10")
   }
   test("GreaterThan[10] should fail for lower or equal to to (implicitly)") {
     failCompilationWith(errors("val a: Int Refined GreaterThan[10] = 7"),
-      "Validation failed: 7 < 10")
+      "Validation failed: 7 > 10")
   }
   test("GreaterThan[10] should pass for greater than 10") {
     val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
@@ -31,15 +31,19 @@ class BasicSpec extends CompileTimeSuite {
     val a: Refined[Int, GreaterThan[10]] = 16
     assertEquals(a + 0, 16)
   }
-  test("""StartsWith["abc] should fail for incorrect input""") {
-    failCompilationWith(errors("""mkValidatedString["abd", StartsWith["abc"]]("abd")"""),
-                  "Validation failed: abd.startsWith(abc)")
+  test("GreaterThan And LowerThan") {
+    val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 15
   }
-  test("""StartsWith["abc] should pass""") {
-    val a: String Refined StartsWith["abc"] = mkValidatedString["abcd", StartsWith["abc"]]("abcd")
-    assertEquals(a + "", "abcd")
-    val a2: String Refined StartsWith["abc"] = mkValidatedString["abc", StartsWith["abc"]]("abc")
-    assertEquals(a2 + "", "abc")
+  test("GreaterThan And LowerThan - fail") {
+    failCompilationWith(errors("val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 5"),
+                  "Validation failed: 5 > 10")
+    failCompilationWith(errors("val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 25"),
+      "Validation failed: 25 < 20")
+  }
+  test("inference") {
+    // TODO:
+    val a: Refined[Int, GreaterThan[10]] = 16
+//    val b: Refined[Int, GreaterThan[5]] = a
   }
   test("Refined.unsafeApply should not compile outside of pl.msitko.refined package") {
     val es = errors("Refined.unsafeApply[34, GreaterThan[10]](34)")
