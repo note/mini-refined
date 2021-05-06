@@ -9,9 +9,19 @@ import quoted.{Expr, Quotes}
 
 object auto:
   implicit inline def mkValidatedInt[V <: Int with Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
-    inline if ValidateInt.validate[V, E]
-      then Refined.unsafeApply(v)
-      else error("Validation failed")
+    inline ValidateInt.validate[V, E] match
+      case Some(failMsg) =>
+        inline val wholePredicateMsg = ValidateInt.showPredicate[V, E]
+        if wholePredicateMsg == failMsg
+          then reportError("Validation failed: " + failMsg)
+          else reportError("Validation failed: " + ValidateInt.showPredicate[V, E] + ", predicate failed: " + failMsg)
+      case None => Refined.unsafeApply(v)
+
+  // hack around scala.compiletime.error limitation that its argument has to be a literal
+  private inline def reportError(a: String): Nothing = ${ reportErrorCode('a) }
+
+  private def reportErrorCode(a: Expr[String])(using q: Quotes): Nothing =
+    q.reflect.report.throwError(a.valueOrError)
 
   implicit inline def mkValidatedString[V <: String with Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
     inline if ValidateString.validate[V, E]

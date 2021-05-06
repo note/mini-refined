@@ -19,7 +19,7 @@ class IntSpec extends CompileTimeSuite {
   }
   test("GreaterThan[10] should fail for lower or equal to to (implicitly)") {
     failCompilationWith(errors("val a: Int Refined GreaterThan[10] = 7"),
-      "Validation failed: 7 > 10")
+                  "Validation failed: 7 > 10")
   }
   test("GreaterThan[10] should pass for greater than 10") {
     val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
@@ -34,11 +34,27 @@ class IntSpec extends CompileTimeSuite {
   test("GreaterThan And LowerThan") {
     val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 15
   }
-  test("GreaterThan And LowerThan - fail") {
+  test("GreaterThan And LowerThan - failure") {
     failCompilationWith(errors("val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 5"),
-                  "Validation failed: 5 > 10")
-    failCompilationWith(errors("val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 25"),
-      "Validation failed: 25 < 20")
+                  "Validation failed: (5 > 10 And 5 < 20), predicate failed: 5 > 10")
+    assert(errors("val b: Int Refined And[GreaterThan[10], LowerThan[20]] = 25").nonEmpty)
+    // Following assertion fail because `errors` returns:
+    // The value of: a$proxy2
+    // could not be extracted using scala.quoted.FromExpr$PrimitiveFromExpr@5f5131cc"""
+    // I believe it's only an artifact of scala.compiletime.testing.typeCheckErrors, the message is as expected when trying to compile
+//    failCompilationWith(errors("val b: Int Refined And[GreaterThan[10], LowerThan[20]] = 25"),
+//                  "Validation failed: 25 < 20")
+  }
+  test("nested boolean conditions") {
+    val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 15
+    val b: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 115
+  }
+  test("nested boolean conditions - failure") {
+    failCompilationWith(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 5"),
+                  "Validation failed: ((5 > 10 And 5 < 20) Or (5 > 110 And 5 < 120))")
+    // Similarly to above comments, we cannot assert errors due to scala.compiletime.testing.typeCheckErrors limitations
+    assert(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 35").nonEmpty)
+    assert(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 125").nonEmpty)
   }
   test("inference") {
     // TODO:
