@@ -10,7 +10,7 @@ object Common {
       organization := "pl.msitko",
       version := versionArg,
 
-      scalaVersion := "3.0.0-RC3",
+      scalaVersion := "3.0.0",
       // Uncomment when https://github.com/scalameta/scalafmt/issues/2478 is fixed
       // scalafmtOnCompile := true,
 

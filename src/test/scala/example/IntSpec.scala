@@ -36,14 +36,9 @@ class IntSpec extends CompileTimeSuite {
   }
   test("GreaterThan And LowerThan - failure") {
     shouldContain(errors("val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 5"),
-                  "Validation failed: (5 > 10 And 5 < 20), predicate failed: 5 > 10")
-    assert(errors("val b: Int Refined And[GreaterThan[10], LowerThan[20]] = 25").nonEmpty)
-    // Following assertion fail because `errors` returns:
-    // The value of: a$proxy2
-    // could not be extracted using scala.quoted.FromExpr$PrimitiveFromExpr@5f5131cc"""
-    // I believe it's only an artifact of scala.compiletime.testing.typeCheckErrors, the message is as expected when trying to compile
-//    failCompilationWith(errors("val b: Int Refined And[GreaterThan[10], LowerThan[20]] = 25"),
-//                  "Validation failed: 25 < 20")
+            "Validation failed: (5 > 10 And 5 < 20), predicate failed: 5 > 10")
+    shouldContain(errors("val b: Int Refined And[GreaterThan[10], LowerThan[20]] = 25"),
+            "Validation failed: (25 > 10 And 25 < 20), predicate failed: 25 < 20")
   }
   test("nested boolean conditions") {
     val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 15
@@ -53,8 +48,11 @@ class IntSpec extends CompileTimeSuite {
     shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 5"),
                   "Validation failed: ((5 > 10 And 5 < 20) Or (5 > 110 And 5 < 120))")
     // Similarly to above comments, we cannot assert errors due to scala.compiletime.testing.typeCheckErrors limitations
-    assert(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 35").nonEmpty)
-    assert(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 125").nonEmpty)
+    println("bazinga")
+    shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 35"),
+            "Validation failed: ((35 > 10 And 35 < 20) Or (35 > 110 And 35 < 120))")
+    shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 125"),
+            "Validation failed: ((125 > 10 And 125 < 20) Or (125 > 110 And 125 < 120))")
   }
   test("basic inference (GreaterThan)") {
     val a: Int Refined GreaterThan[10] = 16
