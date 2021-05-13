@@ -10,7 +10,7 @@ import scala.compiletime.testing.{typeCheckErrors => errors}
 
 class StringSpec extends CompileTimeSuite {
   test("""StartsWith["abc] should fail for incorrect input""") {
-    failCompilationWith(errors("""mkValidatedString["abd", StartsWith["abc"]]("abd")"""),
+    shouldContain(errors("""mkValidatedString["abd", StartsWith["abc"]]("abd")"""),
       "Validation failed: abd.startsWith(abc)")
   }
   test("""StartsWith["abc] should pass""") {

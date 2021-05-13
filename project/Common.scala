@@ -11,7 +11,7 @@ object Common {
       version := versionArg,
 
       scalaVersion := "3.0.0-RC3",
-      // Uncomment when scalafmt for scala 3 released: https://github.com/scalameta/scalafmt/issues/2216
+      // Uncomment when https://github.com/scalameta/scalafmt/issues/2478 is fixed
       // scalafmtOnCompile := true,
 
       commonSmlBuildSettings,

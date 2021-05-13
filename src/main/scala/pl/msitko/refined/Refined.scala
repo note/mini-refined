@@ -17,16 +17,27 @@ object auto:
           else reportError("Validation failed: " + ValidateInt.showPredicate[V, E] + ", predicate failed: " + failMsg)
       case None => Refined.unsafeApply(v)
 
-  // hack around scala.compiletime.error limitation that its argument has to be a literal
-  private inline def reportError(a: String): Nothing = ${ reportErrorCode('a) }
-
-  private def reportErrorCode(a: Expr[String])(using q: Quotes): Nothing =
-    q.reflect.report.throwError(a.valueOrError)
-
   implicit inline def mkValidatedString[V <: String with Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
     inline if ValidateString.validate[V, E]
       then Refined.unsafeApply(v)
       else error("Validation failed")
+
+  implicit inline def intLowerThanInference[T <: Int with Singleton, U <: Int with Singleton](v: Int Refined LowerThan[T]): Int Refined LowerThan[U] =
+    inline erasedValue[T] < erasedValue[U] match
+      case _: true => Refined.unsafeApply(v.value)
+      case _: false => error("Cannot be inferred")
+
+  implicit inline def intGreaterThanInference[T <: Int with Singleton, U <: Int with Singleton](v: Int Refined GreaterThan[T]): Int Refined GreaterThan[U] =
+    inline erasedValue[T] > erasedValue[U] match
+      case _: true => Refined.unsafeApply(v.value)
+      case _: false => error("Cannot be inferred")
+
+  // hack around scala.compiletime.error limitation that its argument has to be a literal
+  // See: https://github.com/lampepfl/dotty/issues/10315
+  private inline def reportError(a: String): Nothing = ${ reportErrorCode('a) }
+
+  private def reportErrorCode(a: Expr[String])(using q: Quotes): Nothing =
+    q.reflect.report.throwError(a.valueOrError)
 
 //opaque type Refined[Underlying, ValidateExpr] = Underlying
 // I couldn't make the following work with opaque type:
