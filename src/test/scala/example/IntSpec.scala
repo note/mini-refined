@@ -1,13 +1,13 @@
 package example
 
-import pl.msitko.refined.Refined
+import pl.msitko.refined.{Refined, ValidateList}
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.ValidateExpr._
 import munit.Assertions.assert
 import pl.msitko.refined.testUtils.CompileTimeSuite
-import scala.language.implicitConversions
 
+import scala.language.implicitConversions
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
 class IntSpec extends CompileTimeSuite {

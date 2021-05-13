@@ -7,7 +7,7 @@ import pl.msitko.refined.ValidateExpr.{And, EndsWith, StartsWith}
 import quoted.{Expr, Quotes}
 
 object ValidateString:
-  transparent inline def validate[V <: String with Singleton, E <: ValidateExpr]: Boolean =
+  transparent inline def validate[V <: String & Singleton, E <: ValidateExpr]: Boolean =
     inline erasedValue[E] match
       case _: StartsWith[t] =>
         inline startsWith(constValue[V], constValue[t]) match

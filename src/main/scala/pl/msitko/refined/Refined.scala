@@ -8,7 +8,7 @@ import pl.msitko.refined.ValidateExpr._
 import quoted.{Expr, Quotes}
 
 object auto:
-  implicit inline def mkValidatedInt[V <: Int with Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
+  implicit inline def mkValidatedInt[V <: Int & Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
     inline ValidateInt.validate[V, E] match
       case Some(failMsg) =>
         inline val wholePredicateMsg = ValidateInt.showPredicate[V, E]
@@ -17,17 +17,17 @@ object auto:
           else reportError("Validation failed: " + ValidateInt.showPredicate[V, E] + ", predicate failed: " + failMsg)
       case None => Refined.unsafeApply(v)
 
-  implicit inline def mkValidatedString[V <: String with Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
+  implicit inline def mkValidatedString[V <: String & Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
     inline if ValidateString.validate[V, E]
       then Refined.unsafeApply(v)
       else error("Validation failed")
 
-  implicit inline def intLowerThanInference[T <: Int with Singleton, U <: Int with Singleton](v: Int Refined LowerThan[T]): Int Refined LowerThan[U] =
+  implicit inline def intLowerThanInference[T <: Int & Singleton, U <: Int & Singleton](v: Int Refined LowerThan[T]): Int Refined LowerThan[U] =
     inline erasedValue[T] < erasedValue[U] match
       case _: true => Refined.unsafeApply(v.value)
       case _: false => error("Cannot be inferred")
 
-  implicit inline def intGreaterThanInference[T <: Int with Singleton, U <: Int with Singleton](v: Int Refined GreaterThan[T]): Int Refined GreaterThan[U] =
+  implicit inline def intGreaterThanInference[T <: Int & Singleton, U <: Int & Singleton](v: Int Refined GreaterThan[T]): Int Refined GreaterThan[U] =
     inline erasedValue[T] > erasedValue[U] match
       case _: true => Refined.unsafeApply(v.value)
       case _: false => error("Cannot be inferred")
@@ -53,6 +53,6 @@ final class Refined[+T, P] private (val value: T) extends AnyVal
 object Refined:
   // We cannot simply `implicit inline def mk...(): Refined` because inline and opaque types do not compose
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
-  private [refined] def unsafeApply[T <: Int with Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
-  private [refined] def unsafeApply[T <: String with Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
+  private [refined] def unsafeApply[T <: Int & Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
+  private [refined] def unsafeApply[T <: String & Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
   implicit def unwrap[T, P](in: Refined[T, P]): T = in.value
