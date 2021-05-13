@@ -47,8 +47,6 @@ class IntSpec extends CompileTimeSuite {
   test("nested boolean conditions - failure") {
     shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 5"),
                   "Validation failed: ((5 > 10 And 5 < 20) Or (5 > 110 And 5 < 120))")
-    // Similarly to above comments, we cannot assert errors due to scala.compiletime.testing.typeCheckErrors limitations
-    println("bazinga")
     shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 35"),
             "Validation failed: ((35 > 10 And 35 < 20) Or (35 > 110 And 35 < 120))")
     shouldContain(errors("val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 125"),
