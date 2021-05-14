@@ -5,7 +5,7 @@ import scala.compiletime.ops.int._
 import scala.compiletime.{codeOf, constValue, erasedValue, error}
 import pl.msitko.refined.ValidateExpr
 import pl.msitko.refined.ValidateExpr._
-import quoted.{Expr, Quotes}
+import quoted._
 
 object auto:
   implicit inline def mkValidatedInt[V <: Int & Singleton, E <: ValidateExpr](v: V): Refined[V, E] =
@@ -22,14 +22,19 @@ object auto:
       then Refined.unsafeApply(v)
       else reportError("Validation failed")
 
+  implicit inline def mkValidatedList[T, E <: ValidateExpr](inline v: List[T]): Refined[List[T], E] =
+    inline ValidateList.validate[E](v) match
+      case ""       => Refined.unsafeApply(v)
+      case failMsg: String  => reportError("Validation failed: " + failMsg)
+
   implicit inline def intLowerThanInference[T <: Int & Singleton, U <: Int & Singleton](v: Int Refined LowerThan[T]): Int Refined LowerThan[U] =
     inline erasedValue[T] < erasedValue[U] match
-      case _: true => Refined.unsafeApply(v.value)
+      case _: true  => Refined.unsafeApply(v.value)
       case _: false => reportError("Cannot be inferred")
 
   implicit inline def intGreaterThanInference[T <: Int & Singleton, U <: Int & Singleton](v: Int Refined GreaterThan[T]): Int Refined GreaterThan[U] =
     inline erasedValue[T] > erasedValue[U] match
-      case _: true => Refined.unsafeApply(v.value)
+      case _: true  => Refined.unsafeApply(v.value)
       case _: false => reportError("Cannot be inferred")
 
   // hack around scala.compiletime.error limitation that its argument has to be a literal
@@ -55,4 +60,5 @@ object Refined:
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
   private [refined] def unsafeApply[T <: Int & Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
   private [refined] def unsafeApply[T <: String & Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
+  private [refined] def unsafeApply[T, P <: ValidateExpr](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
   implicit def unwrap[T, P](in: Refined[T, P]): T = in.value
