@@ -1,10 +1,11 @@
-package example
+package pl.msitko.refined
 
 import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.ValidateExpr._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
+
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
 class ListSpec extends CompileTimeSuite {

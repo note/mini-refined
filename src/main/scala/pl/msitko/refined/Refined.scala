@@ -62,3 +62,5 @@ object Refined:
   private [refined] def unsafeApply[T <: String & Singleton, P <: ValidateExpr](i: T): T Refined P = new Refined[T, P](i)
   private [refined] def unsafeApply[T, P <: ValidateExpr](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
   implicit def unwrap[T, P](in: Refined[T, P]): T = in.value
+
+  def refineV[T, P <: ValidateExpr](v: T): Either[String, T Refined P] = ???

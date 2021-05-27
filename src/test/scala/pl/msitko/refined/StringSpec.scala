@@ -1,4 +1,4 @@
-package example
+package pl.msitko.refined
 
 import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._

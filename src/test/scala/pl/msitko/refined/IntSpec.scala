@@ -1,14 +1,14 @@
-package example
+package pl.msitko.refined
 
-import pl.msitko.refined.{Refined, ValidateList}
-import pl.msitko.refined.Refined._
-import pl.msitko.refined.auto._
-import pl.msitko.refined.ValidateExpr._
 import munit.Assertions.assert
+import pl.msitko.refined.Refined._
+import pl.msitko.refined.ValidateExpr._
+import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
+import pl.msitko.refined.{Refined, ValidateList}
 
-import scala.language.implicitConversions
 import scala.compiletime.testing.{typeCheckErrors => errors}
+import scala.language.implicitConversions
 
 class IntSpec extends CompileTimeSuite {
   test("GreaterThan[10] should fail for lower or equal to to") {
@@ -64,9 +64,5 @@ class IntSpec extends CompileTimeSuite {
     val b: Int Refined LowerThan[15] = a
     shouldContain(errors("val c: Int Refined LowerThan[5] = a"),
             "Cannot be inferred")
-  }
-  test("Refined.unsafeApply should not compile outside of pl.msitko.refined package") {
-    val es = errors("Refined.unsafeApply[34, GreaterThan[10]](34)")
-    assert(clue(es.head.message).contains("none of the overloaded alternatives named unsafeApply can be accessed as a member"))
   }
 }
