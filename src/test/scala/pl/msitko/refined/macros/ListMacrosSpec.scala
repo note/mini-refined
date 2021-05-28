@@ -8,9 +8,11 @@ final case class TestData(a: Int, b: String)
 
 class ListMacrosSpec extends CompileTimeSuite {
   test("should work for non-empty lists") {
-    assertEquals(ListMacros.listSize(List(1,2,3)), 3)
+    assertEquals(ListMacros.listSize(List(1, 2, 3)), 3)
     assertEquals(ListMacros.listSize(List("a", "b")), 2)
-    assertEquals(ListMacros.listSize(List(TestData(0, "ab"), TestData(1, "ab"), TestData(2, "ab"), TestData(3, "ab"))), 4)
+    assertEquals(
+      ListMacros.listSize(List(TestData(0, "ab"), TestData(1, "ab"), TestData(2, "ab"), TestData(3, "ab"))),
+      4)
   }
   test("should work for empty lists") {
     assertEquals(ListMacros.listSize(List.empty[Int]), 0)

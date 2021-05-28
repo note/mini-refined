@@ -1,5 +1,3 @@
 package pl.msitko.refined
 
-class RuntimeIntSpec extends munit.FunSuite {
-
-}
+class RuntimeIntSpec extends munit.FunSuite {}

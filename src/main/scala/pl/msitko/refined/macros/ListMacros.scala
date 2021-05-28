@@ -3,6 +3,7 @@ package pl.msitko.refined.macros
 import quoted.*
 
 object ListMacros:
+
   transparent inline def listSize[T](inline in: List[T]): Int =
     ${ listSizeCode('in) }
 

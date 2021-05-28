@@ -12,4 +12,4 @@ object ValidateExpr:
   class StartsWith[T <: String & Singleton]       extends StringLeaf
   class EndsWith[T <: String & Singleton]         extends StringLeaf
   abstract class ListLeaf                         extends ValidateExpr
-  class Size[T <: IntLeaf]          extends ListLeaf
+  class Size[T <: IntLeaf]                        extends ListLeaf

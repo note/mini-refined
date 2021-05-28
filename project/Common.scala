@@ -11,8 +11,7 @@ object Common {
       version := versionArg,
 
       scalaVersion := "3.0.0",
-      // Uncomment when https://github.com/scalameta/scalafmt/issues/2478 is fixed
-      // scalafmtOnCompile := true,
+      scalafmtOnCompile := true,
 
       commonSmlBuildSettings,
       testFrameworks += new TestFramework("munit.Framework")

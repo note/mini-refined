@@ -6,6 +6,7 @@ import scala.compiletime.{codeOf, constValue, erasedValue, error}
 import pl.msitko.refined.ValidateExpr.{And, GreaterThan, LowerThan, Or}
 
 object ValidateInt:
+
   transparent inline def validate[V <: Int & Singleton, E <: ValidateExpr]: String =
     validateV[E](constValue[V], constValue[ToString[V]])
 
@@ -18,7 +19,7 @@ object ValidateInt:
     inline erasedValue[E] match
       case _: LowerThan[t] =>
         inline v < constValue[t] match
-          case _: true => ""
+          case _: true  => ""
           case _: false => showPredicateV[E](v, asString)
       case _: GreaterThan[t] =>
         inline v > constValue[t] match
