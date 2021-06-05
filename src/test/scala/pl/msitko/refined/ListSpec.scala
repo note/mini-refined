@@ -2,7 +2,9 @@ package pl.msitko.refined
 
 import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
-import pl.msitko.refined.ValidateExpr._
+// TODO: those imports are too complicated
+import pl.msitko.refined.compiletime.ValidateExprList._
+import pl.msitko.refined.compiletime.ValidateExprInt._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
 

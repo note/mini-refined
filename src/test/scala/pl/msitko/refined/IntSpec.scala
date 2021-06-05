@@ -2,7 +2,6 @@ package pl.msitko.refined
 
 import munit.Assertions.assert
 import pl.msitko.refined.Refined._
-import pl.msitko.refined.ValidateExpr._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
 import pl.msitko.refined.{Refined, ValidateList}
@@ -21,7 +20,7 @@ class IntSpec extends CompileTimeSuite {
   test("GreaterThan[10] should pass for greater than 10") {
     val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
     val xy: Int                        = 45
-    val xyz                            = xy + 32
+    val xyz                            = a + 32
     assertEquals(a + 0, 16)
   }
   test("GreaterThan[10] should pass for greater than 10 (implicitly)") {
