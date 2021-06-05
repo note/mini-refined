@@ -1,4 +1,4 @@
-package pl.msitko.refined
+package pl.msitko.refined.compiletime
 
 import scala.compiletime.ops.boolean._
 import scala.compiletime.ops.int._
@@ -7,10 +7,7 @@ import pl.msitko.refined.compiletime.ValidateExprInt
 import pl.msitko.refined.compiletime.ValidateExprInt.{And, GreaterThan, LowerThan, Or}
 
 object ValidateInt:
-
-  type Res = String | Null
-
-  transparent inline def validate[V <: Int & Singleton, E <: ValidateExprInt]: Res =
+  transparent inline def validate[V <: Int & Singleton, E <: ValidateExprInt]: String | Null =
     validateV[E](constValue[V], constValue[ToString[V]])
 
   // It used to have Option[String] as a return type but there were some glitches when trying to report errors:
@@ -18,15 +15,15 @@ object ValidateInt:
   // [error]
   // [error]      The value of: "Validation failedd: (25 > 10 And 25 < 20)".+(failMsg)
   // [error]      could not be extracted using scala.quoted.FromExpr$PrimitiveFromExpr@60d33381
-  transparent inline def validateV[E <: ValidateExprInt](v: Int, asString: String): Res =
+  transparent inline def validateV[E <: ValidateExprInt](v: Int, asString: String): String | Null =
     inline erasedValue[E] match
       case _: LowerThan[t] =>
         inline v < constValue[t] match
-          case _: true  => null
+          case _: true => null
           case _: false => showPredicateV[E](asString)
       case _: GreaterThan[t] =>
         inline v > constValue[t] match
-          case _: true  => null
+          case _: true => null
           case _: false => showPredicateV[E](asString)
       case _: And[a, b] =>
         inline validateV[a](v, asString) match

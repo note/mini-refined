@@ -1,4 +1,4 @@
-package pl.msitko.refined
+package pl.msitko.refined.compiletime
 
 import pl.msitko.refined.compiletime.ValidateExprList
 import pl.msitko.refined.compiletime.ValidateExprList._
@@ -13,7 +13,7 @@ object ValidateList:
     inline erasedValue[E] match
       case _: Size[t] =>
         inline ValidateInt.validateV[t](ListMacros.listSize(in), ListMacros.listSizeString(in)) match
-          case null      => null
+          case null => null
           case failMsg => "list size doesn't hold predicate: " + failMsg
       case _ =>
         "Couldn't be validated as List"

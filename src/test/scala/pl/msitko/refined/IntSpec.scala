@@ -4,7 +4,7 @@ import munit.Assertions.assert
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
-import pl.msitko.refined.{Refined, ValidateList}
+import pl.msitko.refined.Refined
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
 import scala.language.implicitConversions
@@ -19,8 +19,6 @@ class IntSpec extends CompileTimeSuite {
   }
   test("GreaterThan[10] should pass for greater than 10") {
     val a: Int Refined GreaterThan[10] = mkValidatedInt[16, GreaterThan[10]](16)
-    val xy: Int                        = 45
-    val xyz                            = a + 32
     assertEquals(a + 0, 16)
   }
   test("GreaterThan[10] should pass for greater than 10 (implicitly)") {

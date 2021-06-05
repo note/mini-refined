@@ -1,6 +1,4 @@
-package pl.msitko.refined
-
-import pl.msitko.refined.ValidateString.validate
+package pl.msitko.refined.compiletime
 
 import scala.compiletime.ops.boolean._
 import scala.compiletime.ops.int._
@@ -21,7 +19,7 @@ object ValidateString:
             showPredicateV[E](constValue[V])
       case _: EndsWith[t] =>
         inline endsWith(constValue[V], constValue[t]) match
-          case _: true  => null
+          case _: true => null
           case _: false =>
             showPredicateV[E](constValue[V])
       case _: And[a, b] =>
@@ -33,7 +31,7 @@ object ValidateString:
           case _ => res
       case _: Or[a, b] =>
         inline validate[V, a] match
-          case null    => null
+          case null => null
           case _ => validate[V, b]
 
   private transparent inline def startsWith(inline v: String, inline pred: String): Boolean =

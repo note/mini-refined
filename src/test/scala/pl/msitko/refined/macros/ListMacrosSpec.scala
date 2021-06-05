@@ -1,7 +1,8 @@
 package pl.msitko.refined.macros
 
-import pl.msitko.refined.ValidateList
+import pl.msitko.refined.compiletime.ValidateList
 import pl.msitko.refined.testUtils.CompileTimeSuite
+
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
 final case class TestData(a: Int, b: String)
