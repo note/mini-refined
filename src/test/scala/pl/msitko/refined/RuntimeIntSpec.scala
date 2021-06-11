@@ -29,5 +29,14 @@ class RuntimeIntSpec extends munit.FunSuite {
     assertEquals(res2, Left("Validation of refined type failed: (100 > 100 Or 100 < 10)"))
   }
 
+  test("should work for nested Or(And, And)") {
+    type Pred = Or[And[GreaterThan[5], LowerThan[10]], And[GreaterThan[105], LowerThan[110]]]
+    val correctValues = List(6, 9, 106, 109)
+    val incorrectValues = List(4, 5, 10, 105, 110)
+
+    assert(clue(correctValues.map(Refined.refineV[Pred](_))).forall(_.isRight))
+    assert(clue(incorrectValues.map(Refined.refineV[Pred](_))).forall(_.isLeft))
+  }
+
 
 }

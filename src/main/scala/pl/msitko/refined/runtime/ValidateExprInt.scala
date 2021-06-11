@@ -26,9 +26,7 @@ object ValidateExprInt:
 
     def validate(v: Int): Option[String] = a.validate(v) match
       case Some(err) =>
-        b.validate(v) match
-          case Some(err2) => Some(s"($err Or $err2)")
-          case None => None
+        b.validate(v).map(err2 => s"($err Or $err2)")
       case None =>
         None
 
