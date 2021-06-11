@@ -28,6 +28,9 @@ object ValidateExprInt:
       case Some(err) =>
         b.validate(v) match
           case Some(err2) => Some(s"($err Or $err2)")
+          case None => None
+      case None =>
+        None
 
   final case class LowerThan(t: Int) extends ValidateExprInt:
 
