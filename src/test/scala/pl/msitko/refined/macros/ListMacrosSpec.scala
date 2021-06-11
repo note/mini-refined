@@ -1,6 +1,6 @@
 package pl.msitko.refined.macros
 
-import pl.msitko.refined.compiletime.ValidateList
+import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
 
 import scala.compiletime.testing.{typeCheckErrors => errors}

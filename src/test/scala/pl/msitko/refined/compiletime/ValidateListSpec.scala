@@ -4,8 +4,6 @@ import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
 // TODO: those imports are too complicated
 import pl.msitko.refined.auto._
-import pl.msitko.refined.compiletime.ValidateExprInt._
-import pl.msitko.refined.compiletime.ValidateExprList._
 import pl.msitko.refined.testUtils.CompileTimeSuite
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
