@@ -32,7 +32,7 @@ object ValidateString:
       case _: Or[a, b] =>
         inline validate[V, a] match
           case null => null
-          case _ => validate[V, b]
+          case _    => validate[V, b]
 
   private transparent inline def startsWith(inline v: String, inline pred: String): Boolean =
     ${ startsWithCode('v, 'pred) }

@@ -7,6 +7,7 @@ import pl.msitko.refined.compiletime.ValidateExprInt
 import pl.msitko.refined.compiletime.ValidateExprInt.{And, GreaterThan, LowerThan, Or}
 
 object ValidateInt:
+
   transparent inline def validate[V <: Int & Singleton, E <: ValidateExprInt]: String | Null =
     validateV[E](constValue[V], constValue[ToString[V]])
 
@@ -19,11 +20,11 @@ object ValidateInt:
     inline erasedValue[E] match
       case _: LowerThan[t] =>
         inline v < constValue[t] match
-          case _: true => null
+          case _: true  => null
           case _: false => showPredicateV[E](asString)
       case _: GreaterThan[t] =>
         inline v > constValue[t] match
-          case _: true => null
+          case _: true  => null
           case _: false => showPredicateV[E](asString)
       case _: And[a, b] =>
         inline validateV[a](v, asString) match

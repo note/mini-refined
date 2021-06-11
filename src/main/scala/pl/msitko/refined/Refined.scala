@@ -7,6 +7,7 @@ import pl.msitko.refined.compiletime._
 import pl.msitko.refined.compiletime.ValidateExprInt._
 import pl.msitko.refined.compiletime.ValidateExprList.{And, Or}
 import quoted._
+import pl.msitko.refined.{runtime as RT}
 
 import quoted.Expr
 
@@ -37,15 +38,18 @@ object auto:
 
   implicit inline def mkValidatedString[V <: String & Singleton, E <: ValidateExprString](v: V): Refined[V, E] =
     inline ValidateString.validate[V, E] match
-      case null      => Refined.unsafeApply(v)
+      case null => Refined.unsafeApply(v)
       case failMsg =>
         inline val wholePredicateMsg = ValidateString.showPredicate[V, E]
-        inline if wholePredicateMsg == ValidateString.validate[V, E] then reportError("Validation failed: " + wholePredicateMsg)
-        else reportError("Validation failed: " + wholePredicateMsg + ", predicate failed: " + ValidateString.validate[V, E])
+        inline if wholePredicateMsg == ValidateString.validate[V, E] then
+          reportError("Validation failed: " + wholePredicateMsg)
+        else
+          reportError(
+            "Validation failed: " + wholePredicateMsg + ", predicate failed: " + ValidateString.validate[V, E])
 
   implicit inline def mkValidatedList[T, E <: ValidateExprList](inline v: List[T]): Refined[List[T], E] =
     inline ValidateList.validate[E](v) match
-      case null              => Refined.unsafeApply(v)
+      case null    => Refined.unsafeApply(v)
       case failMsg => reportError("Validation failed: " + failMsg)
 
   implicit inline def intLowerThanInference[T <: Int & Singleton, U <: Int & Singleton](
@@ -100,13 +104,14 @@ object Refined:
 
   // We cannot simply `implicit inline def mk...(): Refined` because inline and opaque types do not compose
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
-  private[refined] def unsafeApply[T <: Int & Singleton, P <: ValidateExprInt](i: T): T Refined P = new Refined[T, P](i)
+  private[refined] def unsafeApply[T <: Int, P <: ValidateExprInt](i: T): T Refined P = new Refined[T, P](i)
 
-  private[refined] def unsafeApply[T <: String & Singleton, P <: ValidateExprString](i: T): T Refined P =
+  private[refined] def unsafeApply[T <: String, P <: ValidateExprString](i: T): T Refined P =
     new Refined[T, P](i)
   private[refined] def unsafeApply[T, P <: ValidateExprList](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
   implicit def unwrap[T <: Int, P <: ValidateExprInt](in: Refined[T, P]): T                 = in.value
   implicit def unwrap[T <: String, P <: ValidateExprString](in: Refined[T, P]): T           = in.value
   implicit def unwrap[X, T <: List[X], P <: ValidateExprList](in: Refined[T, P]): List[X]   = in.value
 
-//def refineV[T, P <: ValidateExpr](v: T): Either[String, T Refined P] = ???
+  inline def refineV[P <: ValidateExprInt]: RT.ValidateInt[P] =
+    new RT.ValidateInt[P](RT.ValidateExprInt.fromCompiletime[P])
