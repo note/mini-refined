@@ -1,16 +1,16 @@
-package pl.msitko.refined
+package pl.msitko.refined.compiletime
 
 import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
 // TODO: those imports are too complicated
-import pl.msitko.refined.compiletime.ValidateExprList._
-import pl.msitko.refined.compiletime.ValidateExprInt._
 import pl.msitko.refined.auto._
+import pl.msitko.refined.compiletime.ValidateExprInt._
+import pl.msitko.refined.compiletime.ValidateExprList._
 import pl.msitko.refined.testUtils.CompileTimeSuite
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
-class ListSpec extends CompileTimeSuite {
+class ValidateListSpec extends CompileTimeSuite {
   test("Size[GreaterThan] should pass") {
     val a: List[String] Refined Size[GreaterThan[1]] = List("a", "b")
     val b: List[String] Refined Size[GreaterThan[1]] = List("a", "b", "c")

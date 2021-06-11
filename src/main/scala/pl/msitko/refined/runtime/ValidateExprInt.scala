@@ -5,25 +5,20 @@ import pl.msitko.refined.{compiletime as CT}
 import pl.msitko.refined.runtime.ValidateExprInt.{fromCompiletime, And, LowerThan}
 import pl.msitko.refined.Refined
 
-class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt) {
-
+private[refined] class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt):
   def apply(v: Int): Either[String, Int Refined P] =
     rtExpr.validate(v) match
       case Some(err) => Left(s"Validation of refined type failed: $err")
       case None      => Right(Refined.unsafeApply[Int, P](v))
-}
 
-sealed trait ValidateExprInt {
+sealed private[refined] trait ValidateExprInt:
   def validate(v: Int): Option[String]
-}
 
-object ValidateExprInt:
-
+private[refined] object ValidateExprInt:
   final case class And(a: ValidateExprInt, b: ValidateExprInt) extends ValidateExprInt:
     def validate(v: Int): Option[String] = a.validate(v).orElse(b.validate(v))
 
   final case class Or(a: ValidateExprInt, b: ValidateExprInt) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] = a.validate(v) match
       case Some(err) =>
         b.validate(v).map(err2 => s"($err Or $err2)")
@@ -31,13 +26,11 @@ object ValidateExprInt:
         None
 
   final case class LowerThan(t: Int) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] =
       if v < t then None
       else Some(s"$v < $t")
 
   final case class GreaterThan(t: Int) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] =
       if v > t then None
       else Some(s"$v > $t")

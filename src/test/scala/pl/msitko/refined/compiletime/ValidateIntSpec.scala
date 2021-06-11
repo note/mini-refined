@@ -1,15 +1,15 @@
-package pl.msitko.refined
+package pl.msitko.refined.compiletime
 
 import munit.Assertions.assert
+import pl.msitko.refined.Refined
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
-import pl.msitko.refined.Refined
 
 import scala.compiletime.testing.{typeCheckErrors => errors}
 import scala.language.implicitConversions
 
-class IntSpec extends CompileTimeSuite {
+class ValidateIntSpec extends CompileTimeSuite {
   test("GreaterThan[10] should fail for lower or equal to to") {
     shouldContain(errors("mkValidatedInt[7, GreaterThan[10]](7)"), "Validation failed: 7 > 10")
     shouldContain(errors("mkValidatedInt[10, GreaterThan[10]](10)"), "Validation failed: 10 > 10")

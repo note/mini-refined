@@ -1,9 +1,9 @@
-package pl.msitko.refined
+package pl.msitko.refined.runtime
 
-import pl.msitko.refined.auto._
 import pl.msitko.refined.Refined
+import pl.msitko.refined.auto._
 
-class RuntimeIntSpec extends munit.FunSuite {
+class ValidateIntSpec extends munit.FunSuite {
   test("should work for GreaterThan") {
     assertEquals(Refined.refineV[GreaterThan[5]](6), Right(Refined.unsafeApply[Int, GreaterThan[5]](6)))
   }
@@ -31,12 +31,11 @@ class RuntimeIntSpec extends munit.FunSuite {
 
   test("should work for nested Or(And, And)") {
     type Pred = Or[And[GreaterThan[5], LowerThan[10]], And[GreaterThan[105], LowerThan[110]]]
-    val correctValues = List(6, 9, 106, 109)
+    val correctValues   = List(6, 9, 106, 109)
     val incorrectValues = List(4, 5, 10, 105, 110)
 
     assert(clue(correctValues.map(Refined.refineV[Pred](_))).forall(_.isRight))
     assert(clue(incorrectValues.map(Refined.refineV[Pred](_))).forall(_.isLeft))
   }
-
 
 }
