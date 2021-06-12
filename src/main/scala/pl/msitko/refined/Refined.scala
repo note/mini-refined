@@ -90,28 +90,23 @@ object auto:
 
 // T is covariant so `val a: Refined[Int, GreaterThan[10]] = 186` works as well as `val a: Refined[186, GreaterThan[10]] = 186`
 // but not sure how important it's that the latter works
-final class Refined[+T <: Refined.Base, P <: Refined.ValidateExprFor[T]] private (val value: T) extends AnyVal
+final class Refined[+T, P] private (val value: T) extends AnyVal
 
 //trait Refined[+Underlying, ValidateExpr]
 
 object Refined:
   type Base = Int | String | List[Any]
 
-  type ValidateExprFor[B <: Base] = B match
-    case Int       => ValidateExprInt
-    case String    => ValidateExprString
-    case List[Any] => ValidateExprList
+  private[refined] def unsafeApply[T, P](v: T): T Refined P = new Refined[T, P](v)
 
   // We cannot simply `implicit inline def mk...(): Refined` because inline and opaque types do not compose
   // Read about it here: https://github.com/lampepfl/dotty/issues/6802
-  private[refined] def unsafeApply[T <: Int, P <: ValidateExprInt](i: T): T Refined P = new Refined[T, P](i)
+//  private[refined] def unsafeApply[T <: Int, P <: ValidateExprInt](i: T): T Refined P = new Refined[T, P](i)
+//
+//  private[refined] def unsafeApply[T <: String, P <: ValidateExprString](i: T): T Refined P =
+//    new Refined[T, P](i)
+//  private[refined] def unsafeApply[T, P <: ValidateExprList](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
+  implicit def unwrap[T, P](in: Refined[T, P]): T = in.value
 
-  private[refined] def unsafeApply[T <: String, P <: ValidateExprString](i: T): T Refined P =
-    new Refined[T, P](i)
-  private[refined] def unsafeApply[T, P <: ValidateExprList](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
-  implicit def unwrap[T <: Int, P <: ValidateExprInt](in: Refined[T, P]): T                 = in.value
-  implicit def unwrap[T <: String, P <: ValidateExprString](in: Refined[T, P]): T           = in.value
-  implicit def unwrap[X, T <: List[X], P <: ValidateExprList](in: Refined[T, P]): List[X]   = in.value
-
-  inline def refineV[P <: ValidateExprInt]: RT.ValidateInt[P] =
-    new RT.ValidateInt[P](RT.ValidateExprInt.fromCompiletime[P])
+  inline def refineV[P]: RT.Validate[P] =
+    new RT.Validate[P]

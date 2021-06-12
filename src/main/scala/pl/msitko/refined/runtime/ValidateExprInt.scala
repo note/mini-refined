@@ -5,12 +5,6 @@ import pl.msitko.refined.{compiletime as CT}
 import pl.msitko.refined.runtime.ValidateExprInt.{fromCompiletime, And, LowerThan}
 import pl.msitko.refined.Refined
 
-private[refined] class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt):
-  def apply(v: Int): Either[String, Int Refined P] =
-    rtExpr.validate(v) match
-      case Some(err) => Left(s"Validation of refined type failed: $err")
-      case None      => Right(Refined.unsafeApply[Int, P](v))
-
 sealed private[refined] trait ValidateExprInt:
   def validate(v: Int): Option[String]
 

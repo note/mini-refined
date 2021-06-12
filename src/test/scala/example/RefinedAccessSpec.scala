@@ -11,6 +11,7 @@ class RefinedAccessSpec extends CompileTimeSuite {
     val es = errors("Refined.unsafeApply[34, GreaterThan[10]](34)")
     assert(
       clue(es.head.message)
-        .contains("none of the overloaded alternatives named unsafeApply can be accessed as a member"))
+        .contains(
+          "method unsafeApply cannot be accessed as a member of pl.msitko.refined.Refined.type from class RefinedAccessSpec."))
   }
 }
