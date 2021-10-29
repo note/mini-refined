@@ -7,14 +7,15 @@ import pl.msitko.refined.compiletime._
 import pl.msitko.refined.compiletime.ValidateExprInt._
 import pl.msitko.refined.compiletime.ValidateExprList.{And, Or}
 import quoted._
-import pl.msitko.refined.{runtime as RT}
+import pl.msitko.refined.runtime as RT
 
 import quoted.Expr
 
 object auto:
-  export compiletime.ValidateExprInt.{Or as _, And as _, *}
-  export compiletime.ValidateExprString.{Or as _, And as _, *}
-  export compiletime.ValidateExprList.{Or as _, And as _, *}
+
+  export compiletime.ValidateExprInt.{And as _, Or as _, *}
+  export compiletime.ValidateExprString.{And as _, Or as _, *}
+  export compiletime.ValidateExprList.{And as _, Or as _, *}
 
   type ValidateExpr = compiletime.ValidateExprInt | compiletime.ValidateExprString | compiletime.ValidateExprList
 
@@ -108,6 +109,7 @@ object Refined:
 
   private[refined] def unsafeApply[T <: String, P <: ValidateExprString](i: T): T Refined P =
     new Refined[T, P](i)
+
   private[refined] def unsafeApply[T, P <: ValidateExprList](i: List[T]): List[T] Refined P = new Refined[List[T], P](i)
   implicit def unwrap[T <: Int, P <: ValidateExprInt](in: Refined[T, P]): T                 = in.value
   implicit def unwrap[T <: String, P <: ValidateExprString](in: Refined[T, P]): T           = in.value

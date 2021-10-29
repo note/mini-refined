@@ -11,10 +11,12 @@ import pl.msitko.refined.testUtils.CompileTimeSuite
 import scala.compiletime.testing.{typeCheckErrors => errors}
 
 class ListSpec extends CompileTimeSuite {
+
   test("Size[GreaterThan] should pass") {
     val a: List[String] Refined Size[GreaterThan[1]] = List("a", "b")
     val b: List[String] Refined Size[GreaterThan[1]] = List("a", "b", "c")
   }
+
   test("Size[GreaterThan] should fail for incorrect value") {
     shouldContain(
       errors("val a: List[String] Refined Size[GreaterThan[1]] = List.empty"),

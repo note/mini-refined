@@ -1,7 +1,7 @@
 package pl.msitko.refined.runtime
 
 import compiletime.{constValue, erasedValue}
-import pl.msitko.refined.{compiletime as CT}
+import pl.msitko.refined.compiletime as CT
 import pl.msitko.refined.runtime.ValidateExprInt.{fromCompiletime, And, LowerThan}
 import pl.msitko.refined.Refined
 
@@ -11,6 +11,7 @@ class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt) {
     rtExpr.validate(v) match
       case Some(err) => Left(s"Validation of refined type failed: $err")
       case None      => Right(Refined.unsafeApply[Int, P](v))
+
 }
 
 sealed trait ValidateExprInt {
@@ -28,7 +29,7 @@ object ValidateExprInt:
       case Some(err) =>
         b.validate(v) match
           case Some(err2) => Some(s"($err Or $err2)")
-          case None => None
+          case None       => None
       case None =>
         None
 
