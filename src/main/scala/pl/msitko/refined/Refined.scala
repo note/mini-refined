@@ -70,7 +70,7 @@ object auto:
   private inline def reportError(inline a: String): Nothing = ${ reportErrorCode('a) }
 
   private def reportErrorCode(a: Expr[String])(using q: Quotes): Nothing =
-    q.reflect.report.throwError(a.valueOrError)
+    q.reflect.report.errorAndAbort(a.valueOrAbort)
 
 //  private transparent inline def stringEquals(inline a: String, inline b: String): Boolean = ${ stringEqualsCode('a, 'b) }
 //

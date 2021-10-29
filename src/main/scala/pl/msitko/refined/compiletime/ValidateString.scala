@@ -38,14 +38,14 @@ object ValidateString:
     ${ startsWithCode('v, 'pred) }
 
   private def startsWithCode(v: Expr[String], pred: Expr[String])(using Quotes): Expr[Boolean] =
-    val res = v.valueOrError.startsWith(pred.valueOrError)
+    val res = v.valueOrAbort.startsWith(pred.valueOrAbort)
     Expr(res)
 
   private transparent inline def endsWith(inline v: String, inline pred: String): Boolean =
     ${ endsWithCode('v, 'pred) }
 
   private def endsWithCode(v: Expr[String], pred: Expr[String])(using Quotes): Expr[Boolean] =
-    val res = v.valueOrError.endsWith(pred.valueOrError)
+    val res = v.valueOrAbort.endsWith(pred.valueOrAbort)
     Expr(res)
 
   transparent inline def showPredicate[V <: String & Singleton, E <: ValidateExprString]: String =

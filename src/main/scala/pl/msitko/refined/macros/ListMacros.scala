@@ -21,7 +21,7 @@ object ListMacros:
           Expr(0)
         case _ =>
           val treeStr = in.asTerm.show(using Printer.TreeStructure)
-          q.reflect.report.throwError(s"Cannot determine size of list in compiletime. Tree: $treeStr")
+          q.reflect.report.errorAndAbort(s"Cannot determine size of list in compiletime. Tree: $treeStr")
     rec(in.asTerm)
 
   // TODO: Remove code duplication as it's basically the same as listSize
@@ -42,5 +42,5 @@ object ListMacros:
           Expr("0")
         case _ =>
           val treeStr = in.asTerm.show(using Printer.TreeStructure)
-          q.reflect.report.throwError(s"Cannot determine size of list in compiletime. Tree: $treeStr")
+          q.reflect.report.errorAndAbort(s"Cannot determine size of list in compiletime. Tree: $treeStr")
     rec(in.asTerm)
