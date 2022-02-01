@@ -1,4 +1,5 @@
-import com.softwaremill.SbtSoftwareMillCommon.autoImport.commonSmlBuildSettings
+import com.softwaremill.SbtSoftwareMillCommon.commonSmlBuildSettings
+import com.softwaremill.Publish.ossPublishSettings
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
 import sbt.Keys._
 import sbt.{Compile, Project, Test, TestFramework}
@@ -14,6 +15,7 @@ object Common {
       scalafmtOnCompile := true,
 
       commonSmlBuildSettings,
+      ossPublishSettings,
       scalacOptions ++= Seq(
         "-Xfatal-warnings",
       ),
