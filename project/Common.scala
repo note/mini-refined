@@ -20,7 +20,7 @@ object Common {
       ossPublishSettings ++ Seq(
         sonatypeProfileName := "pl.msitko",
         organizationHomepage := Some(url("https://github.com/note")),
-        homepage := Some(url("https://github.com/note/yt-api-scala")),
+        homepage := Some(url("https://github.com/note/mini-refined")),
         sonatypeProjectHosting := Some(
           GitHubHosting("note", name.value, "pierwszy1@gmail.com")
         ),
