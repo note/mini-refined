@@ -2,7 +2,10 @@ import com.softwaremill.SbtSoftwareMillCommon.commonSmlBuildSettings
 import com.softwaremill.Publish.ossPublishSettings
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
 import sbt.Keys._
+import sbt._
 import sbt.{Compile, Project, Test, TestFramework}
+import xerial.sbt.Sonatype.GitHubHosting
+import xerial.sbt.Sonatype.autoImport.{sonatypeProfileName, sonatypeProjectHosting}
 
 object Common {
   implicit class ProjectFrom(project: Project) {
@@ -14,7 +17,23 @@ object Common {
       scalafmtOnCompile := true,
 
       commonSmlBuildSettings,
-      ossPublishSettings,
+      ossPublishSettings ++ Seq(
+        sonatypeProfileName := "pl.msitko",
+        organizationHomepage := Some(url("https://github.com/note")),
+        homepage := Some(url("https://github.com/note/yt-api-scala")),
+        sonatypeProjectHosting := Some(
+          GitHubHosting("note", name.value, "pierwszy1@gmail.com")
+        ),
+        licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
+        developers := List(
+          Developer(
+            id = "note",
+            name = "Michal Sitko",
+            email = "pierwszy1@gmail.com",
+            url = new URL("https://github.com/note")
+          )
+        )
+      ),
       scalacOptions ++= Seq(
         "-Xfatal-warnings",
       ),
