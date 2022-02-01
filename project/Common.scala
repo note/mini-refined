@@ -5,7 +5,7 @@ import sbt.Keys._
 import sbt._
 import sbt.{Compile, Project, Test, TestFramework}
 import xerial.sbt.Sonatype.GitHubHosting
-import xerial.sbt.Sonatype.autoImport.{sonatypeProfileName, sonatypeProjectHosting}
+import xerial.sbt.Sonatype.autoImport.{sonatypeCredentialHost, sonatypeProfileName, sonatypeProjectHosting, sonatypeRepository}
 
 object Common {
   implicit class ProjectFrom(project: Project) {
@@ -32,7 +32,9 @@ object Common {
             email = "pierwszy1@gmail.com",
             url = new URL("https://github.com/note")
           )
-        )
+        ),
+        sonatypeCredentialHost := "s01.oss.sonatype.org",
+        sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
       ),
       scalacOptions ++= Seq(
         "-Xfatal-warnings",
