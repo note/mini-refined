@@ -6,10 +6,9 @@ import sbt.{Compile, Project, Test, TestFramework}
 
 object Common {
   implicit class ProjectFrom(project: Project) {
-    def commonSettings(nameArg: String, versionArg: String): Project = project.settings(
+    def commonSettings(nameArg: String): Project = project.settings(
       name := nameArg,
       organization := "pl.msitko",
-      version := versionArg,
 
       scalaVersion := "3.1.0",
       scalafmtOnCompile := true,
