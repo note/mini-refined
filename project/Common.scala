@@ -33,7 +33,7 @@ object Common {
             url = new URL("https://github.com/note")
           )
         ),
-        sonatypeCredentialHost := "s01.oss.sonatype.org",
+        sonatypeCredentialHost := "oss.sonatype.org",
       ),
       scalacOptions ++= Seq(
         "-Xfatal-warnings",
