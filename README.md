@@ -4,7 +4,7 @@
 
 A proof of concept of a simple encoding of refinement types in Scala 3.
 
-You can read about motivation behind and the main concepts in the [blog post](https://github.com/note/mini-refined).
+You can read about motivation behind and the main concepts in the [blog post](https://msitko.pl/blog/build-your-own-refinement-types-in-scala3.html).
 
 ## Quick start
 
