@@ -84,4 +84,4 @@ In other words, considering such function:
 def intFun10(a: Int Refined GreaterThan[10]): Unit = ???
 ```
 
-We can it with a value of type `Int Refined GreaterThan[20]` as `mini-refined` recognizes that being greater than 20 implies being greater than 10.
+We can call it with a value of type `Int Refined GreaterThan[20]`, as `mini-refined` recognizes that being greater than 20 implies being greater than 10.
