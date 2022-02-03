@@ -2,7 +2,9 @@
 
 ![example workflow](https://github.com/note/mini-refined/actions/workflows/ci.yml/badge.svg)
 
-A proof of concept of a simple encoding of refinement types in Scala 3
+A proof of concept of a simple encoding of refinement types in Scala 3.
+
+You can read about motivation behind and the main concepts in the [blog post](https://github.com/note/mini-refined).
 
 ## Quick start
 
