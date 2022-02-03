@@ -65,7 +65,7 @@ val c: Int Refined And[GreaterThan[10], LowerThan[20]] = 25
 ## Runtime validation
 
 Everything described so far works only for values known at a compile-time. However, values for most variables are coming
-at runtime. In those you need to use `Refined.refineV[T]` which returns `Either[String, T]`. Example:
+at runtime. For those you need to use `Refined.refineV[T]` which returns `Either[String, T]`. Example:
 
 ```scala
 case class Example(a: Int, b: Int Refined GreaterThan[10])
