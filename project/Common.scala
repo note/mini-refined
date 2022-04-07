@@ -13,7 +13,7 @@ object Common {
       name := nameArg,
       organization := "pl.msitko",
 
-      scalaVersion := "3.1.0",
+      scalaVersion := "3.1.1",
       scalafmtOnCompile := true,
 
       commonSmlBuildSettings,
