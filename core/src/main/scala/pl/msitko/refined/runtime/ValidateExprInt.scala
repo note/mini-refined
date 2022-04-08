@@ -2,17 +2,9 @@ package pl.msitko.refined.runtime
 
 import compiletime.{constValue, erasedValue}
 import pl.msitko.refined.compiletime as CT
+// TODO: is it needed?
 import pl.msitko.refined.runtime.ValidateExprInt.{fromCompiletime, And, LowerThan}
 import pl.msitko.refined.Refined
-
-class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt) {
-
-  def apply(v: Int): Either[String, Int Refined P] =
-    rtExpr.validate(v) match
-      case Some(err) => Left(s"Validation of refined type failed: $err")
-      case None      => Right(Refined.unsafeApply[Int, P](v))
-
-}
 
 sealed trait ValidateExprInt {
   def validate(v: Int): Option[String]
@@ -24,7 +16,6 @@ object ValidateExprInt:
     def validate(v: Int): Option[String] = a.validate(v).orElse(b.validate(v))
 
   final case class Or(a: ValidateExprInt, b: ValidateExprInt) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] = a.validate(v) match
       case Some(err) =>
         b.validate(v) match
@@ -34,13 +25,11 @@ object ValidateExprInt:
         None
 
   final case class LowerThan(t: Int) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] =
       if v < t then None
       else Some(s"$v < $t")
 
   final case class GreaterThan(t: Int) extends ValidateExprInt:
-
     def validate(v: Int): Option[String] =
       if v > t then None
       else Some(s"$v > $t")

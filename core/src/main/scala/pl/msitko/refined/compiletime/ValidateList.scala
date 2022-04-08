@@ -8,7 +8,6 @@ import scala.compiletime.erasedValue
 import scala.quoted.Exprs
 
 object ValidateList:
-
   transparent inline def validate[E <: ValidateExprList](inline in: List[_]): String | Null =
     inline erasedValue[E] match
       case _: Size[t] =>

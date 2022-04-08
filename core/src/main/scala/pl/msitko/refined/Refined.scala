@@ -91,14 +91,16 @@ object auto:
 
 // T is covariant so `val a: Refined[Int, GreaterThan[10]] = 186` works as well as `val a: Refined[186, GreaterThan[10]] = 186`
 // but not sure how important it's that the latter works
-final class Refined[+T <: Refined.Base, P <: Refined.ValidateExprFor[T]] private (val value: T) extends AnyVal
+final class Refined[+T, P <: Refined.ValidateExprFor[T]] private (val value: T) extends AnyVal {
+  override def toString: String = value.toString
+}
 
 //trait Refined[+Underlying, ValidateExpr]
 
 object Refined:
-  type Base = Int | String | List[Any]
+//  type Base = Int | String | List[Any]
 
-  type ValidateExprFor[B <: Base] = B match
+  type ValidateExprFor[B] = B match
     case Int       => ValidateExprInt
     case String    => ValidateExprString
     case List[Any] => ValidateExprList
@@ -115,5 +117,17 @@ object Refined:
   implicit def unwrap[T <: String, P <: ValidateExprString](in: Refined[T, P]): T           = in.value
   implicit def unwrap[X, T <: List[X], P <: ValidateExprList](in: Refined[T, P]): List[X]   = in.value
 
-  inline def refineV[P <: ValidateExprInt]: RT.ValidateInt[P] =
-    new RT.ValidateInt[P](RT.ValidateExprInt.fromCompiletime[P])
+  inline def refineV[P <: ValidateExprInt](v: Int): Either[String, Int Refined P] =
+    RT.ValidateExprInt.fromCompiletime[P].validate(v) match
+      case Some(err) => Left(s"Validation of refined type failed: $err")
+      case None      => Right(Refined.unsafeApply[Int, P](v))
+
+  inline def refineV[P <: ValidateExprString](v: String): Either[String, String Refined P] =
+    RT.ValidateExprString.fromCompiletime[P].validate(v) match
+      case Some(err) => Left(s"Validation of refined type failed: $err")
+      case None      => Right(Refined.unsafeApply[String, P](v))
+
+  inline def refineV[T, P <: ValidateExprList](v: List[T]): Either[String, List[T] Refined P] =
+    RT.ValidateExprList.fromCompiletime[P].validate(v) match
+      case Some(err) => Left(s"Validation of refined type failed: $err")
+      case None      => Right(Refined.unsafeApply[T, P](v))
