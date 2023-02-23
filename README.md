@@ -1,6 +1,6 @@
 # mini-refined
 
-![example workflow](https://github.com/note/mini-refined/actions/workflows/ci.yml/badge.svg)
+[![example workflow](https://github.com/note/mini-refined/actions/workflows/ci.yml/badge.svg)](https://github.com/note/mini-refined/actions)
 
 A proof of concept of a simple encoding of refinement types in Scala 3.
 
