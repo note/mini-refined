@@ -1,7 +1,6 @@
 package pl.msitko.refined
 
 import pl.msitko.refined.auto._
-import pl.msitko.refined.Refined
 
 class RuntimeIntSpec extends munit.FunSuite {
 

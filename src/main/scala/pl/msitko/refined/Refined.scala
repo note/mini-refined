@@ -1,7 +1,5 @@
 package pl.msitko.refined
 
-import scala.compiletime.ops.boolean._
-import scala.compiletime.ops.int._
 import scala.compiletime.{codeOf, constValue, erasedValue, error}
 import pl.msitko.refined.compiletime._
 import pl.msitko.refined.compiletime.ValidateExprInt._

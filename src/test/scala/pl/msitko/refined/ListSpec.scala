@@ -1,7 +1,6 @@
 package pl.msitko.refined
 
-import pl.msitko.refined.Refined
-import pl.msitko.refined.Refined._
+import scala.annotation.nowarn
 // TODO: those imports are too complicated
 import pl.msitko.refined.compiletime.ValidateExprList._
 import pl.msitko.refined.compiletime.ValidateExprInt._
@@ -13,7 +12,9 @@ import scala.compiletime.testing.{typeCheckErrors => errors}
 class ListSpec extends CompileTimeSuite {
 
   test("Size[GreaterThan] should pass") {
+    @nowarn("msg=unused local definition")
     val a: List[String] Refined Size[GreaterThan[1]] = List("a", "b")
+    @nowarn("msg=unused local definition")
     val b: List[String] Refined Size[GreaterThan[1]] = List("a", "b", "c")
   }
 

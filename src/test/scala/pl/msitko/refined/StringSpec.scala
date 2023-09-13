@@ -1,12 +1,12 @@
 package pl.msitko.refined
 
-import pl.msitko.refined.Refined
-import pl.msitko.refined.Refined._
-import pl.msitko.refined.auto._
+import pl.msitko.refined.Refined.*
+import pl.msitko.refined.auto.*
 import pl.msitko.refined.compiletime.ValidateExprString.EndsWith
 import pl.msitko.refined.testUtils.CompileTimeSuite
 
-import scala.compiletime.testing.{typeCheckErrors => errors}
+import scala.annotation.nowarn
+import scala.compiletime.testing.typeCheckErrors as errors
 
 class StringSpec extends CompileTimeSuite {
 
@@ -37,7 +37,9 @@ class StringSpec extends CompileTimeSuite {
   }
 
   test("should work with And") {
+    @nowarn("msg=unused local definition")
     val a: String Refined And[StartsWith["abc"], EndsWith["xyz"]] = "abcdxyz"
+    @nowarn("msg=unused local definition")
     val a2: String Refined Or[StartsWith["abc"], EndsWith["xyz"]] = "axcxyz"
   }
 

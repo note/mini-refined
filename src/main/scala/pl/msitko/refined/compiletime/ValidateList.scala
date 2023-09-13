@@ -1,11 +1,9 @@
 package pl.msitko.refined.compiletime
 
-import pl.msitko.refined.compiletime.ValidateExprList
 import pl.msitko.refined.compiletime.ValidateExprList._
 import pl.msitko.refined.macros.ListMacros
 
 import scala.compiletime.erasedValue
-import scala.quoted.Exprs
 
 object ValidateList:
 

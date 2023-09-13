@@ -1,9 +1,9 @@
 package pl.msitko.refined.macros
 
-import pl.msitko.refined.compiletime.ValidateList
 import pl.msitko.refined.testUtils.CompileTimeSuite
 
-import scala.compiletime.testing.{typeCheckErrors => errors}
+import scala.annotation.nowarn
+import scala.compiletime.testing.typeCheckErrors as errors
 
 final case class TestData(a: Int, b: String)
 
@@ -29,6 +29,7 @@ class ListMacrosSpec extends CompileTimeSuite {
   }
 
   test("should fail compilation in case list size cannot be determined at compile time (2)") {
+    @nowarn("msg=unused local definition")
     val xs = List("a", "b")
     val e1 = errors("ListMacros.listSize(xs)")
     assert(clue(e1.head.message).startsWith("Cannot determine size of list in compiletime"))

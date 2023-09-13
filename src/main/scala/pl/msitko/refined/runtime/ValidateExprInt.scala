@@ -2,7 +2,7 @@ package pl.msitko.refined.runtime
 
 import compiletime.{constValue, erasedValue}
 import pl.msitko.refined.compiletime as CT
-import pl.msitko.refined.runtime.ValidateExprInt.{fromCompiletime, And, LowerThan}
+import pl.msitko.refined.runtime.ValidateExprInt.{And, LowerThan}
 import pl.msitko.refined.Refined
 
 class ValidateInt[P <: CT.ValidateExprInt](rtExpr: ValidateExprInt) {

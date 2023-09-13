@@ -1,10 +1,7 @@
 package pl.msitko.refined.compiletime
 
 import scala.compiletime.ops.any.ToString
-import scala.compiletime.ops.boolean._
-import scala.compiletime.ops.int._
 import scala.compiletime.{codeOf, constValue, erasedValue, error}
-import pl.msitko.refined.compiletime.ValidateExprInt
 import pl.msitko.refined.compiletime.ValidateExprInt.{And, GreaterThan, LowerThan, Or}
 
 object ValidateInt:

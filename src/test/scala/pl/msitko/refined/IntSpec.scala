@@ -1,11 +1,10 @@
 package pl.msitko.refined
 
-import munit.Assertions.assert
 import pl.msitko.refined.Refined._
 import pl.msitko.refined.auto._
 import pl.msitko.refined.testUtils.CompileTimeSuite
-import pl.msitko.refined.Refined
 
+import scala.annotation.nowarn
 import scala.compiletime.testing.{typeCheckErrors => errors}
 import scala.language.implicitConversions
 
@@ -32,6 +31,7 @@ class IntSpec extends CompileTimeSuite {
 
   test("GreaterThan And LowerThan") {
     val a: Int Refined And[GreaterThan[10], LowerThan[20]] = 15
+    assertEquals(a + 0, 15)
   }
 
   test("GreaterThan And LowerThan - failure") {
@@ -46,6 +46,8 @@ class IntSpec extends CompileTimeSuite {
   test("nested boolean conditions") {
     val a: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 15
     val b: Int Refined Or[And[GreaterThan[10], LowerThan[20]], And[GreaterThan[110], LowerThan[120]]] = 115
+    assertEquals(a + 0, 15)
+    assertEquals(b + 0, 115)
   }
 
   test("nested boolean conditions - failure") {
@@ -62,13 +64,15 @@ class IntSpec extends CompileTimeSuite {
 
   test("basic inference (GreaterThan)") {
     val a: Int Refined GreaterThan[10] = 16
-    val b: Int Refined GreaterThan[5]  = a
+    @nowarn("msg=unused local definition")
+    val b: Int Refined GreaterThan[5] = a
     shouldContain(errors("val c: Int Refined GreaterThan[15] = a"), "Cannot be inferred")
 
   }
 
   test("basic inference (LowerThan)") {
     val a: Int Refined LowerThan[10] = 7
+    @nowarn("msg=unused local definition")
     val b: Int Refined LowerThan[15] = a
     shouldContain(errors("val c: Int Refined LowerThan[5] = a"), "Cannot be inferred")
   }
