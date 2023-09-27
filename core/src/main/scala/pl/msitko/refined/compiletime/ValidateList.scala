@@ -6,7 +6,6 @@ import pl.msitko.refined.macros.ListMacros
 import scala.compiletime.erasedValue
 
 object ValidateList:
-
   transparent inline def validate[E <: ValidateExprList](inline in: List[_]): String | Null =
     inline erasedValue[E] match
       case _: Size[t] =>
