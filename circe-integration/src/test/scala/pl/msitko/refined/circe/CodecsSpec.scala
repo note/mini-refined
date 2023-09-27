@@ -35,7 +35,7 @@ class CodecsSpec extends munit.FunSuite:
     val Left(decodingError) = parser.parse(in).flatMap(_.as[Library]): @unchecked
     assertEquals(
       decodingError.getMessage,
-      "Validation of refined type failed: something.startWith(lib): DownField(name)")
+      "DecodingFailure at .name: Validation of refined type failed: something.startWith(lib)")
   }
 
   test("decoder should fail for incorrect Library.version") {
@@ -46,7 +46,7 @@ class CodecsSpec extends munit.FunSuite:
                |}""".stripMargin
 
     val Left(decodingError) = parser.parse(in).flatMap(_.as[Library]): @unchecked
-    assertEquals(decodingError.getMessage, "Validation of refined type failed: 7 > 10: DownField(version)")
+    assertEquals(decodingError.getMessage, "DecodingFailure at .version: Validation of refined type failed: 7 > 10")
   }
 
   test("decoder should fail for incorrect Library.dependencies") {
@@ -59,5 +59,5 @@ class CodecsSpec extends munit.FunSuite:
     val Left(decodingError) = parser.parse(in).flatMap(_.as[Library]): @unchecked
     assertEquals(
       decodingError.getMessage,
-      "Validation of refined type failed: list size doesn't hold predicate: 1 > 1: DownField(dependencies)")
+      "DecodingFailure at .dependencies: Validation of refined type failed: list size doesn't hold predicate: 1 > 1")
   }
