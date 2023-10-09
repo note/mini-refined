@@ -13,5 +13,10 @@ lazy val circeIntegration = (project in file("circe-integration"))
   )
   .dependsOn(miniRefined)
 
-// do not publish the root project
-publish / skip := true
+lazy val rootProject = (project in file("."))
+  .commonSettings("root")
+  .settings(
+    // do not publish the root project
+    publish / skip := true
+  )
+  .aggregate(miniRefined, circeIntegration)
