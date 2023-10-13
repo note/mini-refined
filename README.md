@@ -11,7 +11,7 @@ You can read about motivation behind and the main concepts in the [blog post](ht
 Include library in `build.sbt`:
 
 ```
-libraryDependencies += "pl.msitko" %% "mini-refined" % "0.1.0"
+libraryDependencies += "pl.msitko" %% "mini-refined" % "0.2.0"
 ```
 
 Common imports:
@@ -19,6 +19,14 @@ Common imports:
 ```scala
 import pl.msitko.refined.auto._
 import pl.msitko.refined.Refined
+```
+
+### Circe integration
+
+To use circe integration:
+
+```
+libraryDependencies += "pl.msitko" %% "mini-refined-circe" % "0.2.0"
 ```
 
 ## Int predicates
